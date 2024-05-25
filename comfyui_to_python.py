@@ -247,8 +247,12 @@ class CodeGenerator:
                 if 'unique_id' in class_def_params:
                     inputs['unique_id'] = random.randint(1, 2**64)
                 if 'prompt' in class_def_params:
-                    inputs["prompt"] = {"variable_name": "PROMPT_DATA"}
-                    include_prompt_data = True
+                    if ( 'prompt' not in inputs or isinstance(inputs['prompt'], list)):
+                        print (f'{data["class_type"]}.prompt skipped.')
+                    else:
+                        print (f'{data["class_type"]}.prompt use PROMPT_DATA may cause error!')
+                        inputs["prompt"] = {"variable_name": "PROMPT_DATA"}
+                        include_prompt_data = True
 
             # Create executed variable and generate code
             executed_variables[idx] = f'{self.clean_variable_name(class_type)}_{idx}'
